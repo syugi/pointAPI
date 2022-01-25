@@ -1,6 +1,7 @@
 package com.msheo.pointapi.service;
 
 import com.msheo.pointapi.domain.point.Point;
+import com.msheo.pointapi.dto.point.PointResponseDto;
 import com.msheo.pointapi.dto.point.PointSaveRequestDto;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface PointService {
     Point getPointSum(Long memberId);
 
     //포인트 적립
-    Point savePoint(PointSaveRequestDto dto);
+    PointResponseDto earnPoint(PointSaveRequestDto dto);
 
     //포인트 사용
     Point usePoint(PointSaveRequestDto dto);

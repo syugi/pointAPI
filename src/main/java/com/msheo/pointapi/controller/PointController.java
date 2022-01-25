@@ -1,8 +1,9 @@
 package com.msheo.pointapi.controller;
 
-import com.msheo.pointapi.service.PointService;
 import com.msheo.pointapi.domain.point.Point;
+import com.msheo.pointapi.dto.point.PointResponseDto;
 import com.msheo.pointapi.dto.point.PointSaveRequestDto;
+import com.msheo.pointapi.service.PointService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,11 +46,11 @@ public class PointController {
     }
 
     //포인트 적립
-    @PostMapping("/point/save")
-    public ResponseEntity<?> savePoint(@RequestBody PointSaveRequestDto dto){
-        log.info("save dto : "+dto);
-        Point point = pointService.savePoint(dto);
-        return new ResponseEntity<>(point, HttpStatus.OK);
+    @PostMapping("/point/earn")
+    public ResponseEntity<?> earnPoint(@RequestBody PointSaveRequestDto dto){
+        log.info("earn dto : "+dto);
+        PointResponseDto response = pointService.earnPoint(dto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //포인트 사용

@@ -46,7 +46,7 @@ public class PointControllerTest {
                 .createdId("admin")
                 .build();
 
-        String url = "http://localhost:" + port + "/point/save";
+        String url = "http://localhost:" + port + "/point/earn";
 
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, requestDto, Object.class);
 

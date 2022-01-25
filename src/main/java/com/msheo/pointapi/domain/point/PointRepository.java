@@ -11,6 +11,7 @@ public interface PointRepository extends JpaRepository<Point, Long> {
     @Query("SELECT p "+
             "FROM Point p "+
             "WHERE p.memberId = ?1")
+    //to-do 페이징처리, 사용취소는 조회되지않음
     public List<Point> findListByMemberId(Long memberId);
 
     //회원별 포인트 합계 조회

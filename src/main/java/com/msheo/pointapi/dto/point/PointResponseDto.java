@@ -12,16 +12,17 @@ import java.util.Optional;
 @NoArgsConstructor
 public class PointResponseDto {
 
+    private Long pointId;
     private Long memberId;
     private Long amount;
     private String createdId;
-    private String modifiedDate;
+    private String createdDate;
 
     public PointResponseDto(Point point){
+        this.pointId = point.getPointId();
         this.memberId = point.getMemberId();
         this.amount = point.getAmount();
-        this.createdId = point.getCreatedId();
-        this.modifiedDate = toStringDateTime(point.getModifiedDate());
+        this.createdDate = toStringDateTime(point.getCreatedDate());
     }
 
     private String toStringDateTime(LocalDateTime localDateTime){

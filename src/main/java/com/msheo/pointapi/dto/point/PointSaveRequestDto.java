@@ -12,12 +12,17 @@ import lombok.Setter;
 public class PointSaveRequestDto {
     private Long memberId;
     private Long amount;
+    private String desc;
+    private String tranDate;
     private String createdId;
+    private String status;
 
     @Builder
-    public PointSaveRequestDto(Long memberId, Long amount, String createdId){
+    public PointSaveRequestDto(Long memberId, Long amount, String desc, String tranDate, String createdId){
         this.memberId = memberId;
         this.amount = amount;
+        this.desc = desc;
+        this.tranDate = tranDate;
         this.createdId = createdId;
     }
 
@@ -25,6 +30,8 @@ public class PointSaveRequestDto {
         return Point.builder()
                 .memberId(memberId)
                 .amount(amount)
+                .desc(desc)
+                .tranDate(tranDate)
                 .createdId(createdId)
                 .build();
     }
