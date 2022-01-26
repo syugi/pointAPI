@@ -26,6 +26,7 @@ public class Point extends BaseTimeEntity {
     private String tranDate;
     private String expiryDate;
     private String createdId;
+    private String cancelYn;
 
     @Builder
     public Point(Long memberId, Long amount, String status, String desc, String tranDate, String expiryDate, String createdId){
@@ -36,6 +37,11 @@ public class Point extends BaseTimeEntity {
         this.tranDate = tranDate;
         this.expiryDate = expiryDate;
         this.createdId = createdId;
+        this.cancelYn = "N";
+    }
+
+    public void setCancelYn(String cancelYn){
+        this.cancelYn = cancelYn;
     }
 
     @Override

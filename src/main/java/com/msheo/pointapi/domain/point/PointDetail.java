@@ -21,10 +21,11 @@ public class PointDetail extends BaseTimeEntity {
     private String tranDate;
     private String expiryDate;
     private String createdId;
+    private Long orgPointId;
 
 
     @Builder
-    public PointDetail(Long pointId, Long memberId, Long amount, String status, String tranDate, String expiryDate, String createdId){
+    public PointDetail(Long pointId, Long memberId, Long amount, String status, String tranDate, String expiryDate, String createdId, Long orgPointId){
         this.pointId = pointId;
         this.memberId = memberId;
         this.amount = amount;
@@ -32,6 +33,7 @@ public class PointDetail extends BaseTimeEntity {
         this.tranDate = tranDate;
         this.expiryDate = expiryDate;
         this.createdId = createdId;
+        this.orgPointId = orgPointId;
     }
 
     public PointDetail(Long pointId, Long amount){
@@ -39,14 +41,10 @@ public class PointDetail extends BaseTimeEntity {
         this.amount = amount;
     }
 
-    public PointDetail(Point point) {
+    public PointDetail(Long pointId, Long detailId, Long amount) {
         this.pointId = pointId;
-        this.memberId = memberId;
+        this.detailId = detailId;
         this.amount = amount;
-        this.status = status;
-        this.tranDate = tranDate;
-        this.expiryDate = expiryDate;
-        this.createdId = createdId;
     }
 
 }

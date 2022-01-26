@@ -13,30 +13,44 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PointRepositoryTest {
+public class PointDetailRepositoryTest {
 
     @Autowired
     PointRepository pointRepository;
 
+    @Autowired
+    PointDetailRepository pointDetailRepository;
+
     @After
     public void cleanUp(){
         pointRepository.deleteAll();
+        pointDetailRepository.deleteAll();
     }
+
+
 
     @Test
-    public void POINT_적립_저장(){
+    public void POINT_회원별_합계_조회(){
         long memberId = 999L;
-        long amount = 2000L;
+        long amount1 = 1000L;
+        long amount2 = 2000L;
         pointRepository.save(Point.builder()
                 .memberId(memberId)
-                .amount(amount)
+                .amount(amount1)
                 .build());
 
-        List<Point> pointList = pointRepository.findAll();
+        pointRepository.save(Point.builder()
+                .memberId(memberId)
+                .amount(amount2)
+                .build());
 
-        Point points = pointList.get(0);
-        assertThat(points.getMemberId()).isEqualTo(memberId);
-        assertThat(points.getAmount()).isEqualTo(amount);
+        pointRepository.save(Point.builder()
+                .memberId(memberId+11)
+                .amount(amount1+amount2)
+                .build());
+
+        Long amountSum = pointDetailRepository.amountSum(memberId).orElse(0L);
+
+        assertThat(amountSum).isEqualTo(amount1+amount2);
     }
-
 }

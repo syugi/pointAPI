@@ -42,6 +42,11 @@ public class PointController {
     //포인트 사용/적립 내역 조회
     @GetMapping("/point/list/{memberId}")
     public ResponseEntity<?> getPointList(@PathVariable Long memberId, @RequestParam int page, @RequestParam Optional<Integer> totalPage) {
+        //회원번호 체크
+        if(memberId == null){
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.NO_MEMBER_ID), HttpStatus.OK);
+        }
+
         PageRequest pageRequest = PageRequest.of(page,totalPage.orElse(5));
         Page<Point> points = pointService.getPointList(memberId, pageRequest);
         return new ResponseEntity<>(BaseResponse.res(StatusCode.SUCCESS, ResponseMessage.SUCCESS, points), HttpStatus.OK);
@@ -50,6 +55,12 @@ public class PointController {
     //포인트 합계 조회
     @GetMapping("/point/sum/{memberId}")
     public ResponseEntity<?> getPointSum(@PathVariable Long memberId) {
+
+        //회원번호 체크
+        if(memberId == null){
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.NO_MEMBER_ID), HttpStatus.OK);
+        }
+
         long amountSum = pointService.getPointSum(memberId);
         Point point = Point.builder()
                 .memberId(memberId)
@@ -62,6 +73,11 @@ public class PointController {
     @PostMapping("/point/earn")
     public ResponseEntity<?> earnPoint(@RequestBody PointSaveRequestDto dto){
         log.info("earn dto : "+dto);
+
+        //회원번호 체크
+        if(dto.getMemberId() == null){
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.NO_MEMBER_ID), HttpStatus.OK);
+        }
 
         //포인트 금액 체크
         if(dto.getAmount() == null || dto.getAmount() <= 0){
@@ -76,6 +92,11 @@ public class PointController {
     @PostMapping("/point/use")
     public ResponseEntity<?> usePoint(@RequestBody PointSaveRequestDto dto){
         log.info("use dto : "+dto);
+
+        //회원번호 체크
+        if(dto.getMemberId() == null){
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.NO_MEMBER_ID), HttpStatus.OK);
+        }
 
         //포인트 금액 체크
         if(dto.getAmount() == null || dto.getAmount() >= 0){
@@ -95,10 +116,24 @@ public class PointController {
     }
 
     //포인트 사용 취소
-    @PostMapping("/point/use/cancel")
-    public ResponseEntity<?> useCancelPoint(@RequestBody PointSaveRequestDto dto){
-        log.info("useCancel dto : "+dto);
-        Point point =  pointService.useCancelPoint(dto);
-        return new ResponseEntity<>(BaseResponse.res(StatusCode.SUCCESS, ResponseMessage.SUCCESS, new PointResponseDto(point)), HttpStatus.OK);
+    @PostMapping("/point/use/cancel/{pointId}")
+    public ResponseEntity<?> useCancelPoint(@PathVariable Long pointId){
+        // 체크
+        if(pointId == null){
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.NO_POINT_ID), HttpStatus.OK);
+        }
+
+        log.info("useCancel pointId : "+pointId);
+        Optional<Point> point = pointService.findById(pointId);
+        if(point.isEmpty()){
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.USE_CANCEL_FAIL), HttpStatus.OK);
+        }
+
+        int resultCnt =  pointService.useCancelPoint(point.orElseThrow());
+        if(resultCnt > 0) {
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.SUCCESS, ResponseMessage.SUCCESS), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.USE_CANCEL_FAIL), HttpStatus.OK);
+        }
     }
 }

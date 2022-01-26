@@ -1,15 +1,17 @@
 package com.msheo.pointapi.service;
 
-import com.msheo.pointapi.common.response.BaseResponse;
 import com.msheo.pointapi.domain.point.Point;
-import com.msheo.pointapi.dto.point.PointResponseDto;
 import com.msheo.pointapi.dto.point.PointSaveRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PointService {
+
+    //포인트 조회
+    Optional<Point> findById(Long pointId);
 
     //포인트 전체 조회
     List<Point> findAll();
@@ -27,5 +29,5 @@ public interface PointService {
     Point usePoint(PointSaveRequestDto dto);
 
     //포인트 사용취소
-    Point useCancelPoint(PointSaveRequestDto dto);
+    int useCancelPoint(Point point);
 }

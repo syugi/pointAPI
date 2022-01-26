@@ -84,7 +84,7 @@ public class PointServiceTest {
         assertThat(detail2.getMemberId()).isEqualTo(memberId);
         assertThat(detail2.getAmount()).isEqualTo(-500L);
 
-        long amountSum = pointRepository.amountSum(memberId).orElse(0L);
+        long amountSum = pointDetailRepository.amountSum(memberId).orElse(0L);
         assertThat(amountSum).isEqualTo(500L);
     }
 }
