@@ -39,15 +39,14 @@ public class PointDetail extends BaseTimeEntity {
         this.amount = amount;
     }
 
-    public PointDetail toEntityByPoint(Point point){
-        return PointDetail.builder()
-                .memberId(point.getMemberId())
-                .amount(point.getAmount())
-                .status(point.getStatus())
-                .tranDate(point.getTranDate())
-                .expiryDate(point.getExpiryDate())
-                .createdId(point.getCreatedId())
-                .pointId(point.getPointId())
-                .build();
+    public PointDetail(Point point) {
+        this.pointId = pointId;
+        this.memberId = memberId;
+        this.amount = amount;
+        this.status = status;
+        this.tranDate = tranDate;
+        this.expiryDate = expiryDate;
+        this.createdId = createdId;
     }
+
 }

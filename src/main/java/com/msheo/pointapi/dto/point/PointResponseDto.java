@@ -15,7 +15,6 @@ public class PointResponseDto {
     private Long pointId;
     private Long memberId;
     private Long amount;
-    private String createdId;
     private String createdDate;
 
     public PointResponseDto(Point point){

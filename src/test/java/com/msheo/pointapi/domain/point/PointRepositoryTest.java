@@ -59,7 +59,7 @@ public class PointRepositoryTest {
                 .amount(amount1+amount2)
                 .build());
 
-        Long amountSum = pointRepository.amountSum(memberId);
+        Long amountSum = pointRepository.amountSum(memberId).orElse(0L);
 
         assertThat(amountSum).isEqualTo(amount1+amount2);
     }

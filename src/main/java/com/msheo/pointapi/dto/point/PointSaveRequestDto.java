@@ -14,6 +14,7 @@ public class PointSaveRequestDto {
     private Long amount;
     private String desc;
     private String tranDate;
+    private String expiryDate;
     private String createdId;
     private String status;
 
@@ -32,7 +33,9 @@ public class PointSaveRequestDto {
                 .amount(amount)
                 .desc(desc)
                 .tranDate(tranDate)
+                .expiryDate(expiryDate)
                 .createdId(createdId)
+                .status(status)
                 .build();
     }
 }
