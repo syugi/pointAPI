@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -56,35 +58,72 @@ public class PointServiceTest {
 
         long memberId = 999L;
 
-        pointService.earnPoint(PointSaveRequestDto.builder()
+        //적립
+        Point point1 = pointService.earnPoint(PointSaveRequestDto.builder()
                 .memberId(memberId)
                 .amount(1000L)
                 .build());
 
-        pointService.earnPoint(PointSaveRequestDto.builder()
+        Point point2 = pointService.earnPoint(PointSaveRequestDto.builder()
                 .memberId(memberId)
                 .amount(1000L)
                 .build());
 
-        pointService.usePoint(PointSaveRequestDto.builder()
+        //사용
+        Point usePoint = pointService.usePoint(PointSaveRequestDto.builder()
                 .memberId(memberId)
                 .amount(-1500L)
                 .build());
 
 
-        Point point = pointRepository.findAll().get(2);
-        assertThat(point.getMemberId()).isEqualTo(memberId);
-        assertThat(point.getAmount()).isEqualTo(-1500L);
+        Point rsUsePoint = pointRepository.findById(usePoint.getPointId()).orElseThrow();
+        assertThat(rsUsePoint.getMemberId()).isEqualTo(memberId);
+        assertThat(rsUsePoint.getAmount()).isEqualTo(-1500L);
 
         PointDetail detail1 = pointDetailRepository.findAll().get(2);
         assertThat(detail1.getMemberId()).isEqualTo(memberId);
         assertThat(detail1.getAmount()).isEqualTo(-1000L);
+        assertThat(detail1.getOrgPointId()).isEqualTo(point1.getPointId());
 
         PointDetail detail2 = pointDetailRepository.findAll().get(3);
         assertThat(detail2.getMemberId()).isEqualTo(memberId);
         assertThat(detail2.getAmount()).isEqualTo(-500L);
+        assertThat(detail2.getOrgPointId()).isEqualTo(point2.getPointId());
 
         long amountSum = pointDetailRepository.amountSum(memberId).orElse(0L);
         assertThat(amountSum).isEqualTo(500L);
+    }
+
+    @Test
+    public void 포인트_사용_취소(){
+
+        long memberId = 999L;
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(1000L)
+                .build());
+
+        //사용
+        Point usePoint = pointService.usePoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(-1000L)
+                .build());
+
+        //사용취소
+        Optional<Point> point = pointService.findById(usePoint.getPointId());
+        pointService.useCancelPoint(point.orElseThrow());
+
+        Point p = pointRepository.findById(usePoint.getPointId()).orElseThrow();
+        assertThat(p.getCancelYn()).isEqualTo("Y");
+
+        PointDetail detail = pointDetailRepository.findAll().get(2);
+        assertThat(detail.getAmount()).isEqualTo(1000L);
+        assertThat(detail.getPointId()).isEqualTo(usePoint.getPointId());
+        assertThat(detail.getMemberId()).isEqualTo(memberId);
+
+        long amountSum = pointService.getPointSum(memberId);
+        assertThat(amountSum).isEqualTo(1000L);
     }
 }

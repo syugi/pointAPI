@@ -24,7 +24,7 @@ public class PointRepositoryTest {
     }
 
     @Test
-    public void POINT_적립_저장(){
+    public void POINT_저장(){
         long memberId = 999L;
         long amount = 2000L;
         pointRepository.save(Point.builder()

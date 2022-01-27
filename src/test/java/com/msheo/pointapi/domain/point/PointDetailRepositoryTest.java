@@ -28,7 +28,25 @@ public class PointDetailRepositoryTest {
         pointDetailRepository.deleteAll();
     }
 
+    @Test
+    public void POINT상세_저장(){
+        long memberId = 999L;
+        long amount = 2000L;
+        long pointId = 1;
 
+        pointDetailRepository.save(PointDetail.builder()
+                .memberId(memberId)
+                .amount(amount)
+                .pointId(pointId)
+                .build());
+
+        List<PointDetail> pointDetailList = pointDetailRepository.findAll();
+
+        PointDetail detail = pointDetailList.get(0);
+        assertThat(detail.getMemberId()).isEqualTo(memberId);
+        assertThat(detail.getAmount()).isEqualTo(amount);
+        assertThat(detail.getPointId()).isEqualTo(pointId);
+    }
 
     @Test
     public void POINT_회원별_합계_조회(){
