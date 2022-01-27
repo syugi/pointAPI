@@ -1,5 +1,6 @@
 package com.msheo.pointapi.domain.point;
 
+import com.msheo.pointapi.common.PointStatus;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,17 +35,18 @@ public class PointDetailRepositoryTest {
         long memberId = 999L;
         long amount1 = 1000L;
         long amount2 = 2000L;
-        pointRepository.save(Point.builder()
+
+        pointDetailRepository.save(PointDetail.builder()
                 .memberId(memberId)
                 .amount(amount1)
                 .build());
 
-        pointRepository.save(Point.builder()
+        pointDetailRepository.save(PointDetail.builder()
                 .memberId(memberId)
                 .amount(amount2)
                 .build());
 
-        pointRepository.save(Point.builder()
+        pointDetailRepository.save(PointDetail.builder()
                 .memberId(memberId+11)
                 .amount(amount1+amount2)
                 .build());

@@ -41,10 +41,4 @@ public class PointDetail extends BaseTimeEntity {
         this.amount = amount;
     }
 
-    public PointDetail(Long pointId, Long detailId, Long amount) {
-        this.pointId = pointId;
-        this.detailId = detailId;
-        this.amount = amount;
-    }
-
 }
