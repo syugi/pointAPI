@@ -13,5 +13,4 @@ public interface PointRepository extends JpaRepository<Point, Long> {
             "WHERE p.memberId = ?1 AND p.cancelYn <> 'Y'")
 
     Page<Point> findListByMemberId(Long memberId, Pageable pageable);
-
 }

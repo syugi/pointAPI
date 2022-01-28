@@ -48,29 +48,4 @@ public class PointDetailRepositoryTest {
         assertThat(detail.getPointId()).isEqualTo(pointId);
     }
 
-    @Test
-    public void POINT_회원별_합계_조회(){
-        long memberId = 999L;
-        long amount1 = 1000L;
-        long amount2 = 2000L;
-
-        pointDetailRepository.save(PointDetail.builder()
-                .memberId(memberId)
-                .amount(amount1)
-                .build());
-
-        pointDetailRepository.save(PointDetail.builder()
-                .memberId(memberId)
-                .amount(amount2)
-                .build());
-
-        pointDetailRepository.save(PointDetail.builder()
-                .memberId(memberId+11)
-                .amount(amount1+amount2)
-                .build());
-
-        Long amountSum = pointDetailRepository.amountSum(memberId).orElse(0L);
-
-        assertThat(amountSum).isEqualTo(amount1+amount2);
-    }
 }

@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -126,5 +128,140 @@ public class PointServiceTest {
 
         long amountSum = pointService.getPointSum(memberId);
         assertThat(amountSum).isEqualTo(1000L);
+    }
+
+    @Test
+    public void 포인트_적립_사용_내역_조회(){
+        long memberId = 999L;
+        PageRequest pageRequest = PageRequest.of(0,5);
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(1000L)
+                .build());
+
+        //사용
+        pointService.usePoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(-1000L)
+                .build());
+
+        Page<Point> list1 = pointService.getPointList(memberId, pageRequest);
+        assertThat(list1.getContent().get(0).getMemberId()).isEqualTo(memberId);
+        assertThat(list1.getContent().get(0).getAmount()).isEqualTo(1000L);
+
+        Page<Point> list2 = pointService.getPointList(memberId, pageRequest);
+        assertThat(list2.getContent().get(1).getMemberId()).isEqualTo(memberId);
+        assertThat(list2.getContent().get(1).getAmount()).isEqualTo(-1000L);
+    }
+
+    @Test
+    public void 포인트_사용취소내역_미조회(){
+        long memberId = 999L;
+        PageRequest pageRequest = PageRequest.of(0,5);
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(1000L)
+                .build());
+
+        //사용
+        Point usePoint = pointService.usePoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(-1000L)
+                .build());
+
+        //사용취소
+        Optional<Point> point = pointService.findById(usePoint.getPointId());
+        assertThat(point.isPresent()).isTrue();
+        pointService.useCancelPoint(point.get());
+
+        Page<Point> list = pointService.getPointList(memberId, pageRequest);
+        assertThat(list.getContent().size()).isEqualTo(1);
+
+    }
+
+    @Test
+    public void 포인트_합계_조회(){
+        long memberId = 999L;
+        long amount1 = 1000L;
+        long amount2 = 1500L;
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(amount1)
+                .build());
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(amount2)
+                .build());
+
+        Long pointSum = pointService.getPointSum(memberId);
+
+        assertThat(pointSum).isEqualTo(amount1+amount2);
+    }
+
+    @Test
+    public void 포인트_합계_조회_2(){
+        long memberId = 999L;
+        long amount1 = 1000L;
+        long amount2 = 1500L;
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(amount1)
+                .build());
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(amount2)
+                .build());
+
+        //적립 - 다른회원 적립, 합계미포함
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(888L)
+                .amount(amount2)
+                .build());
+
+        Long pointSum = pointService.getPointSum(memberId);
+
+        assertThat(pointSum).isEqualTo(amount1+amount2);
+    }
+
+    @Test
+    public void 포인트_합계_조회_3(){
+        long memberId = 999L;
+        long amount1 = 1000L;
+        long amount2 = 1500L;
+        long useAmount = -2000L;
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(amount1)
+                .build());
+
+        //적립
+        pointService.earnPoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(amount2)
+                .build());
+
+        //사용
+        pointService.usePoint(PointSaveRequestDto.builder()
+                .memberId(memberId)
+                .amount(useAmount)
+                .build());
+
+        Long pointSum = pointService.getPointSum(memberId);
+
+        assertThat(pointSum).isEqualTo((amount1+amount2)+useAmount);
     }
 }
