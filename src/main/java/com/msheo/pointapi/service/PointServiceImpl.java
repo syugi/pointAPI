@@ -152,7 +152,7 @@ public class PointServiceImpl implements PointService{
         pointRepository.save(point);
 
         //사용취소 대상 조회
-        List<PointDetail> points = pointDetailRepository.findAllForUseCancel(point.getPointId());
+        List<PointDetail> points = pointDetailRepository.findByPointId(point.getPointId());
 
         for(PointDetail pointDt : points){
             pointDetailRepository.save(PointDetail.builder()

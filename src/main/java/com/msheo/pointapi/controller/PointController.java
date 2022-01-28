@@ -41,13 +41,13 @@ public class PointController {
 
     //포인트 사용/적립 내역 조회
     @GetMapping("/point/list/{memberId}")
-    public ResponseEntity<?> getPointList(@PathVariable Long memberId, @RequestParam int page, @RequestParam Optional<Integer> totalPage) {
+    public ResponseEntity<?> getPointList(@PathVariable Long memberId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> totalPage) {
         //회원번호 체크
         if(memberId == null){
             return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.NO_MEMBER_ID), HttpStatus.OK);
         }
 
-        PageRequest pageRequest = PageRequest.of(page,totalPage.orElse(5));
+        PageRequest pageRequest = PageRequest.of(page.orElse(0),totalPage.orElse(5));
         Page<Point> points = pointService.getPointList(memberId, pageRequest);
         return new ResponseEntity<>(BaseResponse.res(StatusCode.SUCCESS, ResponseMessage.SUCCESS, points), HttpStatus.OK);
     }

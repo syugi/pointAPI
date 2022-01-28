@@ -22,9 +22,5 @@ public interface PointDetailRepository extends JpaRepository<PointDetail, Long> 
     List<PointDetail> findAllForUse(Long memberId);
 
     //사용취소처리 대상 조회
-    @Query(value = "SELECT d "+
-            "FROM PointDetail d "+
-            "WHERE d.pointId = ?1 ")
-    List<PointDetail> findAllForUseCancel(Long pointId);
-
+    List<PointDetail> findByPointId(Long pointId);
 }
