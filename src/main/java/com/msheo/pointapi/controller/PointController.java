@@ -129,7 +129,7 @@ public class PointController {
             return new ResponseEntity<>(BaseResponse.res(StatusCode.FAIL, ResponseMessage.USE_CANCEL_FAIL), HttpStatus.OK);
         }
 
-        int resultCnt =  pointService.useCancelPoint(point.orElseThrow());
+        int resultCnt =  pointService.useCancelPoint(point.get());
         if(resultCnt > 0) {
             return new ResponseEntity<>(BaseResponse.res(StatusCode.SUCCESS, ResponseMessage.SUCCESS), HttpStatus.OK);
         }else{

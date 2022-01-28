@@ -76,7 +76,7 @@ public class PointServiceTest {
                 .build());
 
 
-        Point rsUsePoint = pointRepository.findById(usePoint.getPointId()).orElseThrow();
+        Point rsUsePoint = pointRepository.findById(usePoint.getPointId()).get();
         assertThat(rsUsePoint.getMemberId()).isEqualTo(memberId);
         assertThat(rsUsePoint.getAmount()).isEqualTo(-1500L);
 
@@ -113,9 +113,10 @@ public class PointServiceTest {
 
         //사용취소
         Optional<Point> point = pointService.findById(usePoint.getPointId());
-        pointService.useCancelPoint(point.orElseThrow());
+        assertThat(point.isPresent()).isTrue();
+        pointService.useCancelPoint(point.get());
 
-        Point p = pointRepository.findById(usePoint.getPointId()).orElseThrow();
+        Point p = pointRepository.findById(usePoint.getPointId()).get();
         assertThat(p.getCancelYn()).isEqualTo("Y");
 
         PointDetail detail = pointDetailRepository.findAll().get(2);
