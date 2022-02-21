@@ -59,4 +59,37 @@ public class PointControllerTest {
 
 
     }
+
+    @Test
+    public void 포인트_사용() throws Exception{
+
+        PointSaveRequestDto requestDto = PointSaveRequestDto.builder()
+                .memberId(999L)
+                .amount(1000L)
+                .createdId("admin")
+                .build();
+
+        String url = "http://localhost:" + port + "/point/earn";
+
+        restTemplate.postForEntity(url, requestDto, Object.class);
+
+        PointSaveRequestDto requestDto2 = PointSaveRequestDto.builder()
+                .memberId(999L)
+                .amount(-500L)
+                .createdId("admin")
+                .build();
+
+        String url2 = "http://localhost:" + port + "/point/use";
+
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url2, requestDto2, Object.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        List<Point> points = pointRepository.findAll();
+        System.out.println("points = " + points);
+        assertThat(points.get(1).getMemberId()).isEqualTo(requestDto2.getMemberId());
+        assertThat(points.get(1).getAmount()).isEqualTo(requestDto2.getAmount());
+        assertThat(points.get(1).getCreatedId()).isEqualTo(requestDto2.getCreatedId());
+
+    }
 }
