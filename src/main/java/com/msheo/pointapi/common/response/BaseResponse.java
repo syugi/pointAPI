@@ -1,11 +1,8 @@
 package com.msheo.pointapi.common.response;
 
-import com.msheo.pointapi.domain.point.Point;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

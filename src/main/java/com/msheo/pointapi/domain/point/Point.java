@@ -1,10 +1,7 @@
 package com.msheo.pointapi.domain.point;
 
 import com.msheo.pointapi.domain.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,17 +41,4 @@ public class Point extends BaseTimeEntity {
         this.cancelYn = cancelYn;
     }
 
-    @Override
-    public String toString() {
-        return "Point{" +
-                "pointId=" + pointId +
-                ", memberId=" + memberId +
-                ", amount=" + amount +
-                ", status='" + status + '\'' +
-                ", desc='" + desc + '\'' +
-                ", tranDate='" + tranDate + '\'' +
-                ", expiryDate='" + expiryDate + '\'' +
-                ", createdId='" + createdId + '\'' +
-                '}';
-    }
 }
